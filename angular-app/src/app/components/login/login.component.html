@@ -1,0 +1,39 @@
+<flash-messages class="lead text-danger center"></flash-messages>
+
+<mat-card class="example-card">
+    <mat-card-header>
+        <mat-card-title>Login to continue</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+            <form #loginForm="ngForm" (submit)="loginUser(loginForm);">
+              <table align="center">
+            <tr>
+              <div class="form-group">
+                <mat-form-field>
+               <input matInput  #usernameref="ngModel" [(ngModel)]="username" placeholder="Username" name="username" [class.is-invalid]="usernameref.invalid && usernameref.touched" required>
+               <mat-icon matSuffix >person</mat-icon>
+              </mat-form-field><br>
+               <small class="text-danger" [class.d-none]="usernameref.valid || usernameref.untouched">Username is required</small>
+              </div>
+            </tr>
+            <tr>
+                <div class="form-group">
+                <mat-form-field>
+                <input matInput [type]="hide ? 'password' : 'text'" #passwordref="ngModel" [(ngModel)]="password" placeholder="Password" name="password" [class.is-invalid]="passwordref.invalid && passwordref.touched" required>
+                <mat-icon class="mat-password" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field><br>
+                <small class="text-danger" [class.d-none]="passwordref.valid || passwordref.untouched">Password is required</small>
+              </div>
+            </tr>
+            <tr>
+              <button type="submit" mat-raised-button color='primary' [disabled]="loginForm.invalid">Login</button>
+            </tr>
+            </table>
+            </form>
+          </div>
+
+    </mat-card-content>
+   
+</mat-card>
+
