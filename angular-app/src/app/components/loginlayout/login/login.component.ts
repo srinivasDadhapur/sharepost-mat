@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild,ElementRef,ViewContainerRef } from '@angular/core';
-import { LoginService } from '../../services/login.service'
+import { LoginService } from '../../../services/login.service'
 import { Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material';
 import { MatSnackBarConfig } from '@angular/material';
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['posts']);
         }
         else {
-          this.router.navigate(['login'])
+          this.router.navigate(['loginlayout'])
         }
       }, error => {
         if(error.error.msg=='invalid user'){

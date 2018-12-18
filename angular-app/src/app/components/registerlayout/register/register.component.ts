@@ -1,5 +1,5 @@
 import { Component, OnInit,OnDestroy} from '@angular/core';
-import { LoginService } from '../../services/login.service'
+import { LoginService } from '../../../services/login.service'
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FlashMessagesService } from 'angular2-flash-messages';
