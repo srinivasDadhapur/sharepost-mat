@@ -1,61 +1,67 @@
-<div class="container-fluid text-center">
-  <div class="row content">
-    <div class="col-sm-1 sidenav">
-    </div>
-    <div class="col-sm-9 text-left">
-        <flash-messages></flash-messages>
-      <nav class="bg-light">
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <a class="nav-item nav-link" id="nav-new-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-new"
-            aria-selected="false">New</a>
-          <a  class="nav-item nav-link active" id="nav-article-tab" data-toggle="tab" href="#nav-articles" role="tab"
-            aria-controls="nav-articles" aria-selected="true">My Articles</a>
-        </div>
-      </nav>
-      <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
-          <div class="jumbotron">
-            <form #postForm="ngForm">
+<div class="postcontainer" layout="row" layout-align="center center">
+<mat-tab-group mat-stretch-tabs [(selectedIndex)]="selected">
+  <mat-tab label="New">
+    <mat-card class="mat-card-content">
+      <mat-card-content>
+        <div class="contentContainer">
+        <form #postForm="ngForm">
 
-              <div class="form-group">
-                <textarea #posttitle="ngModel" [(ngModel)]="title" name="posttitle" type="text" class="form-control form-control-sm"
-                  rows="1" placeholder="Title" [class.is-invalid]="posttitle.invalid && posttitle.touched" required>
-                </textarea>
-                <small class="text-danger" [class.d-none]="posttitle.valid || posttitle.untouched">Title is required</small>
-              </div>
+            <mat-form-field class="field"> 
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="5" #posttitle="ngModel" [(ngModel)]="title" name="posttitle" type="text" placeholder="Title" [class.is-invalid]="posttitle.invalid && posttitle.touched" required>
+              </textarea>
+          </mat-form-field >
+          <p>
+          <small class="text-danger" [class.d-none]="posttitle.valid || posttitle.untouched">Title is required</small>
+        </p>
 
-              <div class="form-group">
-                <textarea #newpostarea="ngModel" [(ngModel)]="post" name="post" [class.is-invalid]="newpostarea.invalid && newpostarea.touched"
-                  type="text" class="form-control" placeholder="Content" rows="5" required></textarea>
-                <small class="text-danger" [class.d-none]="newpostarea.valid || newpostarea.untouched">Content is
-                  required to post</small>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary float-right" (click)="newpost();postForm.reset();" [disabled]="postForm.invalid">post</button>
-              </div>
-
-            </form>
+            <mat-form-field class="field">
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="10" #newpostarea="ngModel" [(ngModel)]="post" name="post" [class.is-invalid]="newpostarea.invalid && newpostarea.touched"
+              type="text" placeholder="Content" required></textarea>
+            
+            </mat-form-field>
+            <p><small class="text-danger" [class.d-none]="newpostarea.valid || newpostarea.untouched">Content is
+                required to post</small></p>
+          <div class="form-group">
+            <button mat-raised-button color="primary" (click)="newpost(postForm);">post</button>
           </div>
-        </div>
 
-        <div class="tab-pane fade show active" id="nav-articles" role="tabpanel" aria-labelledby="nav-articles-tab">
-          <div *ngFor="let post of posts" class="jumbotron">
-            <p class="btn badge badge-sm badge-danger float-right" (click)="deletePost(post._id)">Delete</p>
-            <p class="lead">{{post.title}}</p>
-            <hr class="my-4">
-            <div>
-              <p>{{post.post}}....
-                <button class="btn badge badge-sm badge-info" (click)="postDetails(post._id)">Read more</button>
-              </p>
-
-            </div>
-          </div>
-          <br>
-        </div>
+        </form>
       </div>
-    </div>
+    </mat-card-content>
+    </mat-card>
 
-    <div class="col-sm-1 sidenav">
-    </div>
-  </div>
+  </mat-tab>
+  <mat-tab label="My articles">
+   
+      <div *ngFor="let post of posts" class="cards">
+          <mat-card class="border rounded">
+              <mat-card-header>
+                <mat-card-title>
+                   {{post.title}}
+                </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                  <p>{{post.post}}...
+                      <button mat-button color="primary" (click)="postDetails(post._id)">More
+                      </button>
+                  </p>
+                  
+              </mat-card-content>
+              <mat-card-actions align="end" >
+                 
+                  <button  mat-icon-button color="warn" (click)="deletePost(post._id)">
+                    <mat-icon>delete_forever</mat-icon></button>
+                </mat-card-actions>
+            </mat-card>
+            <br>
+      </div>
+
+
+
+      
+  </mat-tab>
+</mat-tab-group>
 </div>

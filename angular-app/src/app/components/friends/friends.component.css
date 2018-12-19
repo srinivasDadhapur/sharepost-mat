@@ -6,3 +6,23 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold
 }
+
+.postcontainer{
+    min-width: 75%;
+    width:60%;
+}
+.field{
+    width: 90%;
+}
+.mat-card-content{
+    width: 90%;
+    height:90%;
+    left:5%;
+    top:4%;
+}
+.cards{
+    width: 60%;
+    min-width: 60%;
+    margin-left: 15%;
+    margin-top: 5%;
+}

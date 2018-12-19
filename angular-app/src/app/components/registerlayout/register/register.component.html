@@ -1,40 +1,43 @@
-<mat-card class="mat-card-class">
+<mat-card>
   <mat-card-header>
     <mat-card-title>Register Here</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form #registerForm="ngForm" (submit)="registerUser()">
+    <form #registerForm="ngForm" (submit)="registerUser(registerForm)">
       <table align="center">
         <tr>
           <div class="form-group">
-              <mat-form-field>
-            <input matInput #nameref="ngModel" [class.is-invalid]="nameref.invalid && nameref.touched"
-              [(ngModel)]="name" placeholder="Name" name="name" required>
-              </mat-form-field>
-              <br>
-            <small class="text-danger" [class.d-none]="nameref.valid || nameref.untouched">Name is required</small>
+            <mat-form-field>
+              <input matInput #nameref="ngModel" [class.is-invalid]="nameref.invalid && nameref.touched" [(ngModel)]="name"
+                placeholder="Name" name="name" required>
+              <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+<p>            <small class="text-danger" [class.d-none]="nameref.valid || nameref.untouched">Name is required</small></p>
           </div>
         </tr>
         <tr>
           <div class="form-group">
-              <mat-form-field>
-            <input #usernameref="ngModel" matInput [class.is-invalid]="usernameref.invalid && usernameref.touched"
-               [(ngModel)]="username" placeholder="email" name="username" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
-              </mat-form-field><br>
+            <mat-form-field>
+              <input #usernameref="ngModel" matInput [class.is-invalid]="usernameref.invalid && usernameref.touched"
+                [(ngModel)]="username" placeholder="Email" name="username" required pattern="^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$">
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field><br>
             <small class="text-danger" [class.d-none]="usernameref.valid || usernameref.untouched">Invalid email</small>
           </div>
         </tr>
         <tr>
           <div class="form-group">
-              <mat-form-field>
-            <input #passwordref="ngModel" matInput type="password" [class.is-invalid]="passwordref.invalid && passwordref.touched"
-               [(ngModel)]="password" placeholder="Password" name="password" required>
-              </mat-form-field><br>
-            <small class="text-danger" [class.d-none]="passwordref.valid || passwordref.untouched">Password is required</small>
+            <mat-form-field>
+              <input #passwordref="ngModel" matInput [type]="hide ? 'password' : 'text'  " [class.is-invalid]="passwordref.invalid && passwordref.touched"
+                [(ngModel)]="password" placeholder="Password" name="password" required>
+              <mat-icon class="mat-icon-password" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
+                'visibility'}}</mat-icon>
+            </mat-form-field>
+            <p><small class="text-danger" [class.d-none]="passwordref.valid || passwordref.untouched">Password is required</small></p>
           </div>
         </tr>
         <tr>
-          <button type="submit" mat-raised-button color="primary"  class='btn btn-primary btn-block' [disabled]="registerForm.invalid">Register</button>
+          <button type="submit" mat-raised-button color="primary">Register</button>
         </tr>
 
       </table>

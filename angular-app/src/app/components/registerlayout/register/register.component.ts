@@ -1,9 +1,8 @@
-import { Component, OnInit,OnDestroy} from '@angular/core';
+import { Component, OnInit,OnDestroy, ViewContainerRef} from '@angular/core';
 import { LoginService } from '../../../services/login.service'
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { FlashMessagesService } from 'angular2-flash-messages';
-
+import {MatSnackBar} from '@angular/material';
+import { MatSnackBarConfig } from '@angular/material';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -11,27 +10,34 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class RegisterComponent implements OnInit {
 
-  public username: string;
-  public password: string;
-  public name: string;
+  private username: string;
+  private password: string;
+  private name: string;
   private registerSub;  
+  private hide=true;
 
-  constructor(private loginAuth: LoginService, private router: Router,private flashmessages: FlashMessagesService) { }
+  constructor(private loginAuth: LoginService, private router: Router,private matSnackbar: MatSnackBar, private viewContainerRef: ViewContainerRef) { }
 
   ngOnInit() {
 
   }
 
-  registerUser() {
-
-    if (this.name == undefined && this.name.trim()==''){
-      return this.flashmessages.show('please enter your name' , {cssClass: 'alert-danger',timeout:1000});
-    }
-    else if (this.username == undefined && this.username.trim()=='') {
-      return this.flashmessages.show('please enter your email' , {cssClass: 'alert-danger',timeout:1000});
-    }
-    else if(this.password==undefined){
-      return this.flashmessages.show('please enter password' , {cssClass: 'alert-danger',timeout:1000});
+  registerUser(registerForm) {
+    let config = new MatSnackBarConfig();
+    config.duration = 1500;
+    config.viewContainerRef = this.viewContainerRef;
+    config.verticalPosition = "bottom";
+    // if (this.name == undefined || this.name.trim()==''){
+    //   this.matSnackbar.open('Please enter your Name','',config);
+    // }
+    // else if (this.username == undefined || this.username.trim()=='') {
+    //   this.matSnackbar.open('Please enter your Email','',config);
+    // }
+    // else if(this.password==undefined){
+    //   this.matSnackbar.open('Please enter your Password','',config);
+    // }
+    if(registerForm.form.invalid){
+      this.matSnackbar.open('Please enter all the details correctly','',config);
     }
     else {
       let user = {
@@ -41,15 +47,17 @@ export class RegisterComponent implements OnInit {
       }
       this.registerSub = this.loginAuth.registerUser(user).subscribe(data => {
         if (data.success) {
-          this.router.navigate(['login']);
-          this.flashmessages.show('registered successfully' , {cssClass: 'alert-danger',timeout:1500});
+          setTimeout(() => {
+            this.router.navigate(['login']);
+          }, 1000);
+          this.matSnackbar.open('Registered Successfully','',config);
         }
         else if(data.msg.code==11000) {
           // console.log(data.msg.code)
-          this.flashmessages.show('User Already Exists',{cssClass:'alert-danger',timeout:1500});
+          this.matSnackbar.open('User already exists','',config);
         }
       }, error => {
-          this.flashmessages.show('Cannot register' , {cssClass: 'alert-danger',timeout:1500});
+        this.matSnackbar.open('Cannot register','',config);
       });
     }
   }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'
 import { LoginService } from './services/login.service'
 import { RouterModule, Routes } from '@angular/router';
@@ -33,6 +33,11 @@ import {MatSnackBar} from '@angular/material';
 import { MatSnackBarConfig } from '@angular/material';
 import { LoginlayoutComponent } from './components/loginlayout/loginlayout.component';
 import { RegisterlayoutComponent } from './components/registerlayout/registerlayout.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
+
 
 const appRoutes: Routes = [
   {path :'',component:HomeComponent,canActivate:[LoginGuard]},
@@ -59,13 +64,15 @@ const appRoutes: Routes = [
     RegisterComponent,
     PostDetailsComponent,
     LoginlayoutComponent,
-    RegisterlayoutComponent
+    RegisterlayoutComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     MatFormFieldModule,
+    MatTabsModule,
     MatInputModule,
+    ReactiveFormsModule,
     MatSelectModule,
     FormsModule,
     MatIconModule,
@@ -73,6 +80,7 @@ const appRoutes: Routes = [
     MatCardModule,
     MatButtonModule,
     HttpClientModule,
+    MatGridListModule,
     FlashMessagesModule,
     BrowserAnimationsModule
   ],

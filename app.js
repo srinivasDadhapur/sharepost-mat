@@ -96,7 +96,7 @@ app.post('/getposts', (req, res) => {
     // console.log(req.body.email);
     postsModel.find({ userId: req.body.userId }, (err, data) => {
 
-        if (data) {
+        if (!!data) {
             let sendUser = [];
             data.forEach(element => {
                 sendUser.push({ post: element.post.slice(0, 50), title: element.title, _id: element._id });
@@ -183,16 +183,24 @@ app.get('/getusers', (req, res) => {
 
 
 app.post('/post', (req, res) => {
-    newPost = new postsModel({ title: req.body.title, post: req.body.post, userId: req.body.userId });
-    newPost.save((err, data) => {
-        if (err) {
-            res.status(403).send({ success: false, msg: 'cannot post your data' });
-        }
-        else {
-            //   console.log(data);
-            res.status(200).send({ success: true, msg: 'posted your data successfully' });
-        }
-    });
+    let title = req.body.title;
+    let post = req.body.post;
+    let userid =  req.body.userId
+    if( title.trim()!='' && post.trim()!='' && userid.trim()!='' && title!=undefined && post!=undefined && userid!=undefined){
+        newPost = new postsModel({ title: title, post: post, userId:userid});
+        newPost.save((err, data) => {
+            if (err) {
+                res.status(403).send({ success: false, msg: 'cannot post your data' });
+            }
+            else {
+                //   console.log(data);
+                res.status(200).send({ success: true, msg: 'posted your data successfully' });
+            }
+        });
+    }
+    else{
+        res.status(405).send({success:false,msg:'posted data is incompatible'});
+    }
 });
 
 app.post('/logout', (req, res) => {

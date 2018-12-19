@@ -31,13 +31,8 @@ export class LoginComponent implements OnInit {
     config.duration = 1500; 
     config.viewContainerRef = this.viewContainerRef; 
     config.verticalPosition = "bottom"
-    if (this.username == undefined) {
-      this.snackBar.open('Please enter the Username', '', config);
-      //return this.flashmessages.show('please enter user name' , {cssClass: 'alert-danger',timeout:1000});
-    }
-    else if(this.password==undefined){
-      this.snackBar.open('Please enter the Password ', '', config);
-      //return this.flashmessages.show('please enter password' , {cssClass: 'alert-danger',timeout:1000});
+    if (loginForm.form.invalid){
+      this.snackBar.open('Please enter all the details correctly','',config);
     }
     else {
       let user = {

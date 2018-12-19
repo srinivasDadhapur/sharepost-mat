@@ -1,7 +1,9 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
 import {  ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
 import { FeedService } from 'src/app/services/feed.service';
+import {MatSnackBar} from '@angular/material';
+import { MatSnackBarConfig } from '@angular/material';
 
 @Component({
   selector: 'app-post-details',
@@ -15,7 +17,9 @@ export class PostDetailsComponent implements OnInit {
   private post = {};
   private comment;
 
-  constructor(private route:ActivatedRoute,private postService:PostsService, private feedService: FeedService) {
+  constructor(private route:ActivatedRoute,private postService:PostsService, private feedService: FeedService,
+    public viewContainerRef: ViewContainerRef,
+            private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -34,7 +38,15 @@ export class PostDetailsComponent implements OnInit {
 
 
   postComment(id,commentForm) {
-    if (this.comment != undefined && this.comment.trim()!='') {
+    let config = new MatSnackBarConfig(); 
+    config.duration = 1000; 
+    config.viewContainerRef = this.viewContainerRef; 
+    config.verticalPosition = "bottom"
+    if(commentForm.form.invalid || this.comment.trim()==''){
+        this.snackBar.open('Write something to comment','',config)
+    }
+
+    else if (this.comment != undefined && this.comment.trim()!='') {
         let token = localStorage.getItem('userToken');
         this.feedService.getUsername(token).subscribe(data => {
             let postedUser = data.name;
@@ -46,12 +58,6 @@ export class PostDetailsComponent implements OnInit {
                 // console.log(error);
             });
         });
-    }
-    else {
-        setTimeout(() => {
-            this.commentrefvariable.nativeElement.hidden=true;
-        }, 1500);
-        this.commentrefvariable.nativeElement.hidden=false;
     }
     // console.log(comment+ " " + user+ " postedUser: "+ postedUser+ " post"+id);
 

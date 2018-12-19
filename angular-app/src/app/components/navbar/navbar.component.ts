@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { FeedService } from 'src/app/services/feed.service';
+import {MatSnackBar} from '@angular/material';
+import { MatSnackBarConfig } from '@angular/material';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-navbar',
@@ -9,7 +13,8 @@ import { FeedService } from 'src/app/services/feed.service';
 export class NavbarComponent implements OnInit {
 
 
-  constructor(private feedService: FeedService) { }
+  constructor(private feedService: FeedService,private router: Router,
+    public viewContainerRef: ViewContainerRef,private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -21,9 +26,13 @@ export class NavbarComponent implements OnInit {
     return false;
   }
   clearItem(){
+    let config = new MatSnackBarConfig(); 
+    config.duration = 1500; 
+    config.viewContainerRef = this.viewContainerRef; 
+    config.verticalPosition = "bottom"
     let token = localStorage.getItem('userToken');
     this.feedService.logoutToken(token).subscribe(data=>{
-    alert(data.msg);
+    this.snackBar.open('Logged Out Successfully','',config)
     },error=>{
 
     })

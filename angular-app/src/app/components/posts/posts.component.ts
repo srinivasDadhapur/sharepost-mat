@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { PostsService } from '../../services/posts.service';
 import { LoginService } from '../../services/login.service';
 import { FeedService } from '../../services/feed.service';
-import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
+import { MatSnackBarConfig } from '@angular/material';
+
 @Component({
     selector: 'app-posts',
     templateUrl: './posts.component.html',
@@ -15,12 +17,13 @@ export class PostsComponent implements OnInit {
     private post;
     private title;
     private userId;
+    selected = 1;
 
     constructor(private postService: PostsService,
             private loginService: LoginService,
             private feedService:FeedService,
-            private router: Router,
-            private flashmessages: FlashMessagesService) { }
+            private router: Router,public viewContainerRef: ViewContainerRef,
+            private snackBar: MatSnackBar) { }
 
     ngOnInit() {
         let token = localStorage.getItem('userToken');
@@ -40,23 +43,33 @@ export class PostsComponent implements OnInit {
         });
     }
 
-    newpost() {
-        if (this.post !=undefined && this.title!=undefined) {
+    newpost(postForm) {
+        let config = new MatSnackBarConfig(); 
+        config.duration = 1500; 
+        config.viewContainerRef = this.viewContainerRef; 
+        config.verticalPosition = "bottom"
+        if(postForm.form.invalid){
+            this.snackBar.open('Please enter the details correctly','',config);
+        }
+        else if (this.post !=undefined && this.title!=undefined && this.post.trim()!='' && this.title.trim()!='') {
             this.postService.addPost(this.title,this.post, this.userId).subscribe(data => {
                 if(data){
-                    this.flashmessages.show('Posted Successfully!',{cssClass:'text-success',timeout:1500});
+                    // this.flashmessages.show('Posted Successfully!',{cssClass:'text-success',timeout:1500});
+                    this.snackBar.open('Posted Successfully','',config);
+                    postForm.reset();
+                    this.selected = 1;
                     this.getposts(this.userId);
                     
                 }
                 else{
-                    this.flashmessages.show('Something went wrong, Please try again',{cssClass:'text-danger',timeout:1500});
+                    this.snackBar.open('Something went wrond, Please try again','',config);
                 }
             },error=>{
-                this.flashmessages.show('Something went wrong, Please try again',{cssClass:'text-danger',timeout:1500});
+                this.snackBar.open('Something went wrond, Please try again','',config);
             });
         }
         else{
-            this.flashmessages.show('Please provide the data',{cssClass:'text-danger',timeout:1500});
+           this.snackBar.open('Something went wrond, Please try again','',config);
 
         }
     }
@@ -66,17 +79,24 @@ export class PostsComponent implements OnInit {
     }
 
     deletePost(postId){
+        let config = new MatSnackBarConfig(); 
+        config.duration = 1500; 
+        config.viewContainerRef = this.viewContainerRef; 
+        config.verticalPosition = "bottom"
         this.postService.deletePost(postId).subscribe(data=>{
             if(data.success){
-                this.flashmessages.show(data.msg,{cssClass:'text-success',timeout:1500})
+                this.snackBar.open(data.msg,'',config);
+                // this.flashmessages.show(data.msg,{cssClass:'text-success',timeout:1500})
             }
             else{
-                this.flashmessages.show(data.msg,{cssClass:'text-success',timeout:1500})
+                this.snackBar.open(data.msg,'',config);
+                // this.flashmessages.show(data.msg,{cssClass:'text-success',timeout:1500})
 
             }
             this.getposts(this.userId);
         },error=>{
-            this.flashmessages.show('something went wrong',{cssClass:'text-success',timeout:1500})
+            this.snackBar.open('Something went wrond, Please try again','',config);
+            // this.flashmessages.show('something went wrong',{cssClass:'text-success',timeout:1500})
         })
     }
 
