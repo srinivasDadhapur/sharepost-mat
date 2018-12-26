@@ -5,9 +5,11 @@
             <mat-card-title>
                {{post.title}}
             </mat-card-title>
+            <mat-card-subtitle>{{post.user}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-              <p>{{post.post}}...
+              <p>
+                {{post.post}}...
                   <button mat-button color="primary" (click)="postDetails(post._id)">More
                   </button>
               </p>

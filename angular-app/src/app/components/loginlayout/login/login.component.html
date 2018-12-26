@@ -9,7 +9,7 @@
               <div class="form-group">
                 <mat-form-field>
                <input matInput type="text" #usernameref="ngModel" [(ngModel)]="username" placeholder="Username" name="username" [class.is-invalid]="usernameref.invalid && usernameref.touched" required>
-               <mat-icon matSuffix >person</mat-icon>
+               <mat-icon matSuffix >email</mat-icon>
               </mat-form-field>
                <p><small class="text-danger" [class.d-none]="usernameref.valid || usernameref.untouched">Username is required</small></p>
               </div>

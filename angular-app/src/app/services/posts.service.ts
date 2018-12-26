@@ -35,6 +35,12 @@ export class PostsService {
   errorHandler(error: HttpErrorResponse) {
     return throwError(error);
   }
+
+  updatePost(title,post,username,postid){
+    let headers = new HttpHeaders().set('Content-Type','application/json');
+    return this.http.post<any>('http://localhost:8080/updatepost',{title:title,userId:username,post:post,postid:postid},{headers:headers}).pipe(catchError(this.errorHandler));
+  }
+
   addPost(title,post,username){
     let headers = new HttpHeaders().set('Content-Type','application/json');
     return this.http.post<any>('http://localhost:8080/post',{title:title,userId:username,post:post},{headers:headers}).pipe(catchError(this.errorHandler));
