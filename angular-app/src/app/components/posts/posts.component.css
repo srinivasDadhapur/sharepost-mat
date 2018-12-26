@@ -10,6 +10,7 @@
 .postcontainer{
     min-width: 75%;
     width:60%;
+    margin-left: 12%;
 }
 .field{
     width: 90%;
@@ -20,9 +21,8 @@
     left:5%;
     top:4%;
 }
-.cards{
-    width: 60%;
-    min-width: 70%;
-    margin-left: 20%;
-    margin-top: 5%;
+
+img{
+    width: 100px;
+    height: 50px;
 }

@@ -17,7 +17,9 @@ export class PostsComponent implements OnInit {
     private post;
     private title;
     private userId;
-    selected = 1;
+    private selected = 1;
+    private update = false;
+    private postid;
 
     constructor(private postService: PostsService,
             private loginService: LoginService,
@@ -41,6 +43,56 @@ export class PostsComponent implements OnInit {
             this.posts = data;
             // console.log(this.posts);
         });
+    }
+
+    updatePost(updateForm){
+        let config = new MatSnackBarConfig(); 
+        config.duration = 1500; 
+        config.viewContainerRef = this.viewContainerRef; 
+        config.verticalPosition = "bottom"
+        if(updateForm.form.invalid){
+            this.snackBar.open('Please enter the details correctly','',config);
+        }
+        else if (this.post !=undefined && this.title!=undefined && this.post.trim()!='' && this.title.trim()!='') {
+            this.postService.updatePost(this.title,this.post, this.userId,this.postid).subscribe(data => {
+                if(data){
+                    // this.flashmessages.show('Posted Successfully!',{cssClass:'text-success',timeout:1500});
+                    this.snackBar.open(data.msg,'',config);
+                    updateForm.reset();
+                    this.update = false;
+                    this.selected = 1;
+                    this.getposts(this.userId);
+                    
+                }
+                else{
+                    this.snackBar.open('Something went wrond, Please try again','',config);
+                }
+            },error=>{
+                console.log(error);
+                this.snackBar.open('Something went wrond, Please try again','',config);
+            });
+        }
+        else{
+           this.snackBar.open('Something went wrond, Please try again','',config);
+
+        }
+    }
+
+    editPost(postid){
+        this.selected =0;
+        this.postService.getPost(postid).subscribe(data=>{
+            this.title = data.title;
+            this.post = data.post;
+            this.update = true;
+            this.postid = data._id;
+        },error=>{
+            console.log(error);
+            
+        })
+        // this.title = post.title;
+        // this.post = post.post;
+        // console.log(title);
+        
     }
 
     newpost(postForm) {

@@ -99,7 +99,7 @@ app.post('/getposts', (req, res) => {
         if (!!data) {
             let sendUser = [];
             data.forEach(element => {
-                sendUser.push({ post: element.post.slice(0, 50), title: element.title, _id: element._id });
+                sendUser.push({ post: element.post.slice(0, 300), user:element.userId, title: element.title, _id: element._id });
             });
             // console.log(sendUser);
 
@@ -140,7 +140,29 @@ app.post('/getpost', (req, res) => {
 });
 
 
-
+app.post('/updatepost',(req,res)=>{
+    let new_title = req.body.title;
+    let new_post = req.body.post;
+    let new_userid =  req.body.userId;
+    let new_postid = req.body.postid;
+    if( new_title.trim()!='' && new_post.trim()!='' && new_userid.trim()!='' && new_title!=undefined && new_post!=undefined && new_userid!=undefined){
+      postsModel.update({_id:new_postid},{$set:{title:new_title,post:new_post,userId:new_userid}}, (err,data)=>{
+          if(data.nModified){
+            //   console.log(data.nModified);
+              return res.status(200).send({success:true,msg:'Updated successfully'})
+          }
+          else if(!data.nModified){
+              return res.status(200).send({success:true,msg:'No modifications done'});
+          }
+          else{
+              return res.status(403).send({success:false,msg:'Cannot update your post'});
+          }
+      });
+    }
+    else{
+        res.status(405).send({success:false,msg:'Posted data is incompatible'});
+    }
+});
 
 app.get('/getposts', (req, res) => {
     // console.log(req.body.email);
@@ -149,7 +171,7 @@ app.get('/getposts', (req, res) => {
         if (data) {
             let sendUser = [];
             data.forEach(element => {
-                sendUser.push({ post: element.post.slice(0, 50), title: element.title, _id: element._id });
+                sendUser.push({ post: element.post.slice(0, 300),user:element.userId, title: element.title, _id: element._id });
             });
             // console.log(sendUser);
 

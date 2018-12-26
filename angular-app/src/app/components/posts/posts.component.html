@@ -24,7 +24,8 @@
             <p><small class="text-danger" [class.d-none]="newpostarea.valid || newpostarea.untouched">Content is
                 required to post</small></p>
           <div class="form-group">
-            <button mat-raised-button color="primary" (click)="newpost(postForm);">post</button>
+            <button mat-raised-button color="primary" (click)="newpost(postForm);" *ngIf="!update">post</button>
+            <button mat-raised-button color="primary" (click)="updatePost(postForm);" *ngIf="update">update</button>
           </div>
 
         </form>
@@ -41,20 +42,24 @@
                 <mat-card-title>
                    {{post.title}}
                 </mat-card-title>
+                <mat-card-subtitle>By: {{post.user}}</mat-card-subtitle>
               </mat-card-header>
 
               <mat-card-content>
-                  <p>{{post.post}}...
+                  <p> 
+                  {{post.post}}...
                       <button mat-button color="primary" (click)="postDetails(post._id)">More
                       </button>
                   </p>
                   
               </mat-card-content>
-              <mat-card-actions align="end" >
-                 
-                  <button  mat-icon-button color="warn" (click)="deletePost(post._id)">
+                 <div align="end">
+                   <button mat-icon-button color="accent" (click)="editPost(post)">
+                     <mat-icon>edit</mat-icon>
+                   </button>
+                  <button  mat-icon-button color="accent" (click)="deletePost(post._id)">
                     <mat-icon>delete_forever</mat-icon></button>
-                </mat-card-actions>
+                  </div>
             </mat-card>
             <br>
       </div>
