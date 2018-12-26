@@ -13,3 +13,6 @@ a simple Blogpost that lets you register, login, post your articles and read art
 
 ![alt text](https://github.com/srinivasDadhapur/sharepost-mat/blob/master/postnew.PNG)
 
+# Articles
+
+![alt text](https://github.com/srinivasDadhapur/sharepost-mat/blob/master/articles.PNG)
