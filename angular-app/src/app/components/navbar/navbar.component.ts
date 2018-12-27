@@ -34,7 +34,9 @@ export class NavbarComponent implements OnInit {
     this.feedService.logoutToken(token).subscribe(data=>{
     this.snackBar.open('Logged Out Successfully','',config)
     },error=>{
-
+      if(!error.success){
+        this.snackBar.open(error.msg,'',config);
+      }
     })
     localStorage.removeItem('userToken');
   }
