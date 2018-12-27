@@ -76,7 +76,7 @@ const postsModel = mongoose.model('post', postSchema);
 // });
 
 
-app.post('/jwtaccess', (req, res) => {
+app.post('/jwtaccess',(req, res) => {
     // console.log(req.body.token);
     jwtModel.findOne({ token: req.body.token }, (err, userToken) => {
 
@@ -88,11 +88,8 @@ app.post('/jwtaccess', (req, res) => {
 })
 
 
-app.get('/', (req, res) => {
-    res.send('Hello there');
-});
 
-app.post('/getposts', (req, res) => {
+app.post('/getposts', verifyToken,(req, res) => {
     // console.log(req.body.email);
     postsModel.find({ userId: req.body.userId }, (err, data) => {
 
@@ -109,7 +106,7 @@ app.post('/getposts', (req, res) => {
     })
 });
 
-app.post('/deletepost', (req, res) => {
+app.post('/deletepost', verifyToken,(req, res) => {
     postsModel.deleteOne({ _id: req.body.id }, (err, data) => {
         if (data.n) {
             res.send({ success: true, msg: "Deleted Successfully" })
@@ -121,7 +118,7 @@ app.post('/deletepost', (req, res) => {
 })
 
 
-app.post('/getpost', (req, res) => {
+app.post('/getpost',verifyToken, (req, res) => {
     // console.log(req.body.email);
     postsModel.findOne({ _id: req.body.id }, (err, data) => {
 
@@ -140,7 +137,31 @@ app.post('/getpost', (req, res) => {
 });
 
 
-app.post('/updatepost',(req,res)=>{
+function verifyToken(req,res,next){
+
+    const bearerHeader = req.headers['authorization'];
+    // console.log(bearerHeader);
+    // const bearer = bearerHeader.split(' ');
+    // console.log(bearer[1]);
+    
+    if(typeof bearerHeader!='undefined'){
+        jwt.verify(bearerHeader,'my secret key',(err,data)=>{
+            if(err){
+               return res.status(403).send({success:false,msg:'unauthorized access'});
+            }
+            else{
+                next();
+            }
+        });
+       
+    }
+    else{
+      return res.status(403).send({success:false,msg:'not authorized'});
+    }
+}
+
+
+app.post('/updatepost',verifyToken,(req,res)=>{
     let new_title = req.body.title;
     let new_post = req.body.post;
     let new_userid =  req.body.userId;
@@ -164,8 +185,9 @@ app.post('/updatepost',(req,res)=>{
     }
 });
 
-app.get('/getposts', (req, res) => {
+app.get('/getposts', verifyToken,(req, res) => {
     // console.log(req.body.email);
+  
     postsModel.find({}, (err, data) => {
 
         if (data) {
@@ -181,7 +203,7 @@ app.get('/getposts', (req, res) => {
     })
 });
 
-app.get('/getusers', (req, res) => {
+app.get('/getusers', verifyToken, (req, res) => {
     // console.log(req.body.email);
     MongoModel.find({}, (err, data) => {
 
@@ -204,7 +226,7 @@ app.get('/getusers', (req, res) => {
 });
 
 
-app.post('/post', (req, res) => {
+app.post('/post', verifyToken,(req, res) => {
     let title = req.body.title;
     let post = req.body.post;
     let userid =  req.body.userId
@@ -225,7 +247,7 @@ app.post('/post', (req, res) => {
     }
 });
 
-app.post('/logout', (req, res) => {
+app.post('/logout',verifyToken, (req, res) => {
     // console.log(req.body.token);
     jwtModel.deleteOne({ token: req.body.token }, (err, data) => {
         if (data.n) {
@@ -238,7 +260,7 @@ app.post('/logout', (req, res) => {
 })
 
 
-app.put('/postcomment', (req, res) => {
+app.put('/postcomment',verifyToken, (req, res) => {
     // console.log(req.body.post);
     let comment = req.body.comment;
     let user = req.body.user;

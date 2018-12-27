@@ -28,20 +28,46 @@ export class PostsComponent implements OnInit {
             private snackBar: MatSnackBar) { }
 
     ngOnInit() {
+
+         let config = new MatSnackBarConfig(); 
+        config.duration = 1500; 
+        config.viewContainerRef = this.viewContainerRef; 
+        config.verticalPosition = "bottom"
+
+
         let token = localStorage.getItem('userToken');
         this.feedService.getUsername(token).subscribe(data=>{
             if(data.tokenexists){
                 this.getposts(data.email);
                 this.userId = data.email;
             }
+            
+        },error=>{
+            if(!error.success){
+                this.snackBar.open(error.msg,'',config);
+            }
+            else{
+                this.snackBar.open('Internal error, Please try again later','',config);
+            }
         });
     }
 
 
     getposts(email) {
+        let config = new MatSnackBarConfig(); 
+        config.duration = 1500; 
+        config.viewContainerRef = this.viewContainerRef; 
+        config.verticalPosition = "bottom"
         this.postService.getPosts(email).subscribe(data => {
             this.posts = data;
-            // console.log(this.posts);
+            // console.log(data.success);
+        },error=>{
+            if(error.success==false){
+                // console.log('hey error');
+                this.snackBar.open(error.msg,'',config);
+            }else{
+                this.snackBar.open('Internal error, Please try again later','',config);
+            }
         });
     }
 
