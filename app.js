@@ -128,7 +128,7 @@ app.post('/getpost',verifyToken, (req, res) => {
                 user: data.userId,
                 title: data.title,
                 _id: data._id,
-                comments: data.comments
+                comments:data.comments
             }
             return res.send(sendUser);
         }
@@ -202,6 +202,10 @@ app.get('/getposts', verifyToken,(req, res) => {
         res.send({ error: err })
     })
 });
+
+app.get('/',(req,res)=>{
+    res.sendFile('./index.html',{root: __dirname });
+})
 
 app.get('/getusers', verifyToken, (req, res) => {
     // console.log(req.body.email);
